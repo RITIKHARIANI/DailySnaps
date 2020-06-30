@@ -1,5 +1,5 @@
 # DailySnaps
-DailySnaps is a Django based News website , as of now there are going to be 5 news channels to get news from.
+DailySnaps is a Django based News website that retrieves news according to user's choice from various sources using endpoints NewsAPI.
 
 ## Features
 This is a **Django-based website** that displays top news and related news using **NewsAPI**.
