@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <title> Awaiting Confirmation </title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Rouge Script' rel='stylesheet'>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <style>
+        .card {
+          box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+          transition: 0.3s;
+          width: 40%;
+        }
+        
+        .card:hover {
+          box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        }
+        
+        .container {
+          padding: 2px 16px;
+        }
+        .grid_wrapper {
+            display: flex;
+            justify-content: center;
+            flex-direction: row;
+        }
+        [data-theme="dark"] {
+      background-color: #111 !important;
+      color: #eee;
+      }
+      [data-theme="dark"] .bg-light{
+      background-color: #94948b !important;
+      color: #eee;
+      }
+        </style>
+  </head>
+    <body>
+    <div class="nav-link">
+
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="darkSwitch">
+            <label class="custom-control-label" for="darkSwitch">Dark Mode</label>
+          </div>
+<script>
+            const darkSwitch = document.getElementById('darkSwitch');
+window.addEventListener('load', () => {
+  if (darkSwitch) {
+    initTheme();
+    darkSwitch.addEventListener('change', () => {
+      resetTheme();
+    });
+  }
+});
+
+function initTheme() {
+  const darkThemeSelected =
+    localStorage.getItem('darkSwitch') !== null &&
+    localStorage.getItem('darkSwitch') === 'dark';
+  darkSwitch.checked = darkThemeSelected;
+  darkThemeSelected ? document.body.setAttribute('data-theme', 'dark') :
+    document.body.removeAttribute('data-theme');
+}
+
+function resetTheme() {
+  if (darkSwitch.checked) {
+    document.body.setAttribute('data-theme', 'dark');
+    localStorage.setItem('darkSwitch', 'dark');
+  } else {
+    document.body.removeAttribute('data-theme');
+    localStorage.removeItem('darkSwitch');
+  }
+} 
+  </script>
+          
+
+        </div>
+        <div class="row-12 text-center">
+          <a class="news-header-logo text-dark" href="{%url 'home_page' %}"><img src="{% static 'news/images/lightlogo.png' %}" style= "height:1%; width:5%;"></a>
+          <br>
+          <h4 style="font-family: Rouge Script;font-size: 50px; "><b>SignUp Confirmation</b></h4>
+        </div>
+        <br>
+        <div class="grid_wrapper">
+      <div class="card">
+        <div class="grid_wrapper">
+        <img src="{% static 'news/images/tick.png' %}" alt="Avatar" style="width:20%; height: 90%;">
+        </div>
+        <div class="container bg-light">
+            <h3 class="pb-10 mb-15 font-italic">Activation link sent! Please check your console or e-mail.</h3>
+        </div>
+      </div>
+    </div>
+
+    
+        

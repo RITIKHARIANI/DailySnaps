@@ -1,0 +1,180 @@
+{% load static %}
+{% load save_news %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+    .card {
+      box-shadow: 0 16px 32px 0 rgba(12, 0, 0, 0.2);
+      transition: 0.3s;
+      width: 40%;
+      padding: 2px 16px;
+      margin-bottom: 30px;
+      margin-top: 30px;
+      margin-right:40px;
+      margin-left:40px;
+    }
+    
+    .card:hover {
+      box-shadow: 0 32px 64px 0 rgba(12,0,0,0.2);
+    }
+    
+    .container {
+      padding: 2px 16px;
+    }
+    a {
+    color: black !important;
+    text-decoration: none !important;
+    }
+
+    .autocomplete {
+     position: relative;
+     display: inline-block;
+    }
+
+    .autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    top: 100%;
+    left: 0;
+    right: 0;
+    }
+
+    .autocomplete-items div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff; 
+    border-bottom: 1px solid #d4d4d4; 
+    }
+
+    .autocomplete-items div:hover {
+    background-color: #e9e9e9; 
+    }
+
+    .autocomplete-active {
+    background-color: DodgerBlue !important; 
+    color: #ffffff; 
+}
+.button {
+  display: inline-block;
+  padding: 10px 35px;
+  font-size: 18px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 15px;
+
+}
+
+.button:hover {background-color: #3e8e41}
+
+.button:active {
+  background-color: #3e8e41;
+  transform: translateY(4px);
+}
+[data-theme="dark"] {
+      background-color: #111 !important;
+      color: #eee;
+      }
+
+
+</style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <title>Saved News</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Rouge Script' rel='stylesheet'>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+  </head>
+  <body>
+  <div class="nav-link">
+
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="darkSwitch">
+            <label class="custom-control-label" for="darkSwitch">Dark Mode</label>
+          </div>
+          <script>
+            const darkSwitch = document.getElementById('darkSwitch');
+window.addEventListener('load', () => {
+  if (darkSwitch) {
+    initTheme();
+    darkSwitch.addEventListener('change', () => {
+      resetTheme();
+    });
+  }
+});
+
+function initTheme() {
+  const darkThemeSelected =
+    localStorage.getItem('darkSwitch') !== null &&
+    localStorage.getItem('darkSwitch') === 'dark';
+  darkSwitch.checked = darkThemeSelected;
+  darkThemeSelected ? document.body.setAttribute('data-theme', 'dark') :
+    document.body.removeAttribute('data-theme');
+}
+
+function resetTheme() {
+  if (darkSwitch.checked) {
+    document.body.setAttribute('data-theme', 'dark');
+    localStorage.setItem('darkSwitch', 'dark');
+  } else {
+    document.body.removeAttribute('data-theme');
+    localStorage.removeItem('darkSwitch');
+  }
+} 
+  </script>
+    <main role="main" class="container">
+
+      <div class="row-12 text-center">
+          <a class="news-header-logo text-dark" href="{%url 'home_page' %}"><img src="{% static 'news/images/lightlogo.png' %}" style= "height:2%; width:5%;"></a>
+          <br>
+          <h4 style="font-family: Rouge Script;font-size: 50px; "><b>Saved News</b></h4>
+      </div>
+      <hr />
+      <div class="row">
+        {% if totalResults %}
+        {% for pos in totalResults %}
+            
+            <a href={{ url|index_value:pos }}>
+            <div class="card col-5">
+                <img src= {{ image|index_value:pos }} alt="Avatar" style="width:100%" onerror="this.onerror=null;this.src='https://media.istockphoto.com/photos/news-background-wallpaper-breaking-news-tag-in-the-center-of-banner-picture-id881903844?k=6&m=881903844&s=612x612&w=0&h=HbxI2Uh_utZifCK7KqIBGWG3eby12RLBaFI48K1K-gU=';">
+                <hr color="black"/>
+                <div class="container">
+                    <p>Source : {{ source|index_value:pos }}</p> 
+                    <p>Author : {{ author|index_value:pos }}</p> 
+                    <p>Description : {{ description|index_value:pos }} </p>
+                </div>
+                <hr color="black"/>
+                <div class="container">
+                    <h4><b>{{ title|index_value:pos }}</b></h4> 
+                    <p>{{ content|index_value:pos }}</p> 
+                </div>
+                <hr color="black"/>
+                <div class="container">
+                    <p>Date : {{ published|index_value:pos }}</p>
+                </div>
+        </a>
+            </div>
+        {% endfor %}
+        {% else %}
+        <h3 class="pb-10 mb-15 font-italic">Save news to see them here anytime.</h3>
+        {% endif %}
+      
+      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    </main>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</body>
+</html>

@@ -1,0 +1,271 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>DailySnaps</title>
+    <!-- Bootsrtap CDN-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
+    <!-- Favicons -->
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      .carimage{
+        opacity: 0.4;
+      }
+      .carimage:hover{
+        opacity: 0.2;
+      }
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+      [data-theme="dark"] {
+      background-color: #111 !important;
+      color: #eee;
+      }
+      [data-theme="dark"] .bg-light{
+      background-color: #94948b !important;
+      color: #eee;
+      }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href='https://fonts.googleapis.com/css?family=Rouge Script' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+  </head>
+
+  <body>
+  <div class="nav-link">
+
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="darkSwitch">
+            <label class="custom-control-label" for="darkSwitch">Dark Mode</label>
+          </div>
+<script>
+            const darkSwitch = document.getElementById('darkSwitch');
+window.addEventListener('load', () => {
+  if (darkSwitch) {
+    initTheme();
+    darkSwitch.addEventListener('change', () => {
+      resetTheme();
+    });
+  }
+});
+
+function initTheme() {
+  const darkThemeSelected =
+    localStorage.getItem('darkSwitch') !== null &&
+    localStorage.getItem('darkSwitch') === 'dark';
+  darkSwitch.checked = darkThemeSelected;
+  darkThemeSelected ? document.body.setAttribute('data-theme', 'dark') :
+    document.body.removeAttribute('data-theme');
+}
+
+function resetTheme() {
+  if (darkSwitch.checked) {
+    document.body.setAttribute('data-theme', 'dark');
+    localStorage.setItem('darkSwitch', 'dark');
+  } else {
+    document.body.removeAttribute('data-theme');
+    localStorage.removeItem('darkSwitch');
+  }
+} 
+  </script>
+          
+
+        </div>
+      <div class="container">
+    <header class="news-header py-3">
+      <div class="row flex-nowrap justify-content-between align-items-center">
+        <div class="col-4 pt-1">
+          <a class="btn btn-sm btn-outline-secondary mr-3" href="{% url 'filter_news' %}">Filter News</a>
+        </div>
+        
+        <div id="backtotop" class="col-4 text-center">
+          <a class="news-header-logo text-dark" href="{%url 'home_page' %}"><img src="{% static 'news/images/lightlogo.png' %}" style= "height:5%; width:10%;"></a>
+          <br><h4 style="font-family: Rouge Script;font-size: 50px "><b>DailySnaps</b></h4>
+        </div>
+        <div class="col-4 d-flex justify-content-end align-items-center">
+          {% if not user.is_authenticated %}
+          <a class="btn btn-sm btn-outline-secondary mr-3" href="{% url 'signup' %}">Sign up</a>
+          <a class="btn btn-sm btn-outline-secondary mr-3" href="{% url 'login' %}">Login</a>
+          {% else %}
+          <span style="margin-right:10px; font-style: oblique;"><h5> Hello!, {{ user.first_name }} </h5> </span>
+          <a class="btn btn-sm btn-outline-secondary mr-3" href="{% url 'logout' %}">Logout</a>
+
+          {% endif %}
+        </div>
+      </div>
+      
+    </header>
+    <div class="container" style="text-align: center;">
+      <div style="display: inline-block;">
+    <div class="nav-scroller py-1 mb-2">
+      <nav class="nav d-flex justify-content-between">
+          <div class="align-items-center">
+        
+        <a class="btn btn-sm btn-outline-secondary mr-3" href="{% url 'saved_news' %}">Saved News</a>
+        <a class="btn btn-sm btn-outline-secondary mr-3" href="{% url 'preferences' %}">Preferences</a>
+      </div>
+      </nav>
+    </div>
+  </div>
+  </div>
+   <div class="jumbotron p-4 p-md-10 text-white rounded bg-dark">
+       
+      <div class="col-md-15 px-0">
+        <div id="myCarousel" class="carousel slide" style="width:fit-content;"> 
+          <!-- The slideshow -->
+          <div class="carousel-inner" style="width:fit-content;">
+            {% for pos in totalResults %}
+              {% if carousel|index_value:pos|carousel_content %}
+                {% if pos %}
+                <div class="carousel-item " role="listbox" style=" width:1060px; height: 400px !important;">
+                  <img class="carimage" src= {{ image|index_value:pos }} alt="Avatar" style="width:100%" onerror="this.onerror=null;this.src='https://media.istockphoto.com/photos/news-background-wallpaper-breaking-news-tag-in-the-center-of-banner-picture-id881903844?k=6&m=881903844&s=612x612&w=0&h=HbxI2Uh_utZifCK7KqIBGWG3eby12RLBaFI48K1K-gU=';">
+                    <div class="carousel-caption">
+                      <h1 class="display-9 font-italic" >{{ title|index_value:pos }}</h1>
+                      <p class="lead mb-0"><a href="{{ url|index_value:pos }}" class="text-white font-weight-bold">Continue reading...</a></p>
+                    </div>
+                </div>
+                {% else %}
+                <div class="carousel-item active" role="listbox" style=" width:1060px; height: 400px !important;">
+                  <img class="carimage" src= {{ image|index_value:pos }} alt="Avatar" style="width:100%" onerror="this.onerror=null;this.src='https://media.istockphoto.com/photos/news-background-wallpaper-breaking-news-tag-in-the-center-of-banner-picture-id881903844?k=6&m=881903844&s=612x612&w=0&h=HbxI2Uh_utZifCK7KqIBGWG3eby12RLBaFI48K1K-gU=';">
+                    <div class="carousel-caption">
+                      <h1 class="display-9 font-italic" >{{ title|index_value:pos }}</h1>
+                      <p class="lead mb-0"><a href="{{ url|index_value:pos }}" class="text-white font-weight-bold">Continue reading...</a></p>
+                    </div>
+                </div>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+              
+          </div>
+          <!-- Left and right controls -->
+          <a class="carousel-control-prev" >
+            <span class="carousel-control-prev-icon"></span>
+          </a>
+          <a class="carousel-control-next" >
+            <span class="carousel-control-next-icon"></span>
+          </a>
+        </div>        
+      </div>
+    
+      <script>
+        $(document).ready(function(){
+          // Activate Carousel
+          $("#myCarousel").carousel();  
+          // Enable Carousel Controls
+          $(".carousel-control-prev").click(function(){
+            $("#myCarousel").carousel("prev");
+          });
+          $(".carousel-control-next").click(function(){
+            $("#myCarousel").carousel("next");
+          });
+        });
+        </script>
+    </div>
+
+    <!-- end of carousel  -->
+    <div class="row mb-2">
+      {% for pos in totalResults %} 
+        {% if carousel|index_value:pos|card_content %}
+          <div class="col-md-6">
+            <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+              <div class="col p-4 d-flex flex-column position-static">
+                <strong class="d-inline-block mb-2 text-primary">Hollywood</strong>
+                <h3 class="mb-0">{{title|index_value:pos}}</h3>
+                <div class="mb-1 text-muted">{{published|index_value:pos}}</div>
+                <p class="card-text mb-auto">{{description|index_value:pos}}</p>
+                <a href={{url|index_value:pos}} class="stretched-link">Continue reading</a>
+              </div>
+              <div class="col-auto d-none d-lg-block">
+                <img class="bd-placeholder-img" width="200" height="250" src= {{ image|index_value:pos }} onerror="this.onerror=null;this.src='https://media.istockphoto.com/photos/news-background-wallpaper-breaking-news-tag-in-the-center-of-banner-picture-id881903844?k=6&m=881903844&s=612x612&w=0&h=HbxI2Uh_utZifCK7KqIBGWG3eby12RLBaFI48K1K-gU=';">
+              </div>
+            </div>
+          </div>
+        {%endif%}
+      {%endfor%}
+    </div>
+  </div>
+
+  <main role="main" class="container">
+    <div class="row">
+      <div class="col-md-8 news-main">
+        <h3 class="pb-4 mb-4 font-italic border-bottom">
+          Word on the Street
+        </h3>
+
+        {%for pos in totalResults%}
+          {% if carousel|index_value:pos|content %}
+            <div class="news-post">
+              <a href={{ url|index_value:pos }}><h3 class="news-post-title">{{title|index_value:pos}}</h3></a>
+              <p class="news-post-meta">{{published|index_value:pos}}</p>
+
+              <h6>{{description|index_value:pos}}</h6>
+              <hr>
+              <p>{{content|index_value:pos}}</p>
+
+            </div><!-- /.news-post -->
+          {%endif%}
+        {%endfor%}
+        
+      </div><!-- /.news-main -->
+
+      <aside class="col-md-4 news-sidebar">
+        <div class="p-4 mb-3 bg-light rounded">
+          <h4 class="font-italic">About</h4>
+          <p class="mb-0">Find the latest news on the Internet in a flash. Create an account to set preferred news categories, save news articles and more.
+          </p>
+        </div>
+
+        <div class="p-4">
+          <h4 class="font-italic">Features</h4>
+          <ol class="list-unstyled mb-0">
+            <li><a href="{% url 'filter_news' %}">Save favourite News through filtering</a></li>
+            <li><a href="{% url 'saved_news' %}">View your Saved News</a></li>
+            <li><a href="{% url 'preferences' %}">View your Preferences</a></li>
+            <li><a href="{% url 'signup' %}">Sign Up with Authentication</a></li>
+          </ol>
+        </div>
+
+        <div class="p-4">
+          <h4 class="font-italic">Elsewhere</h4>
+          <ol class="list-unstyled">
+            <li><a href="https://github.com/RITIKHARIANI/DailySnaps">GitHub</a></li>
+            <li><a href="#">Twitter</a></li>
+            <li><a href="#">Facebook</a></li>
+          </ol>
+          <p><a href="https://newsapi.org/">Powered BY News API </a></p>
+        </div>
+      </aside><!-- /.news-sidebar -->
+
+    </div><!-- /.row -->
+
+  </main><!-- /.container -->
+
+  <footer class="news-footer">
+    <p>
+      <div style="text-align: center;">
+      <a href="#backtotop">Back to top</a>
+    </div>
+    </p>
+  </footer>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
