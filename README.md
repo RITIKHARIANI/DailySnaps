@@ -121,7 +121,7 @@ Once you fill in the details and click Signup button, look inside your terminal/
 
 ### Major Contributors:
 * Aditya Verma: https://github.com/adiver26
-* Rahul Raman: https://github.com/Aiden-Python
+* Rahul Raman: https://github.com/Aiden-Frost
 * Ritik Hariani: https://github.com/RITIKHARIANI
 * Romaanchan Skanda: https://github.com/Prix4Houdini
 
